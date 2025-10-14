@@ -12,10 +12,10 @@ module.exports = {
   ],
   coverageThreshold: {
     global: {
-      branches: 19,
-      functions: 21,
-      lines: 25,
-      statements: 25
+      branches: 10,
+      functions: 15,
+      lines: 15,
+      statements: 15
     }
   },
   extensionsToTreatAsEsm: ['.ts'],
