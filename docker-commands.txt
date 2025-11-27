@@ -19,4 +19,4 @@ CREATE APP IMAGE AND CONTAINER
 
   docker build -t task-app .
 
-  docker run --name task-app -p 8080:8080 --network task-network -t task-app
+  docker run --name task-app -p 5000:5000 --network task-network -t task-app

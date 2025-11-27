@@ -11,7 +11,7 @@ RUN npm install
 COPY backend .
 
 # Expose the port your app listens on
-EXPOSE 3000
+EXPOSE 5000
 
 # RUN THE APP IN THE CONTAINER
 CMD ["npm", "run", "dev"]
