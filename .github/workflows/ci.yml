@@ -1,0 +1,35 @@
+name: CI for Pushes and Pull Requests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository code
+        uses: actions/checkout@v5
+
+      - name: Setup node.js
+        uses: actions/setup-node@v5
+
+      - name: Install all, i guess
+        run: npm run install:all
+      
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: npm install
+
+      - name: Run the linter
+        working-directory: ./backend
+        run: npm run lint:backend
+
+      - name: Run the tests
+        working-directory: ./backend
+        run: npm test:backend
+
