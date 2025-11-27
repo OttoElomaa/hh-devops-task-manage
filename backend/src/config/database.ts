@@ -3,10 +3,12 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const databaseUrl = process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/taskmanagement';
+const databaseUrl = process.env.DATABASE_URL || "";
 
+// THIS CREATES THE SEQUELIZE INSTANCE THAT ACCESSES THE DATABASE
 export const sequelize = new Sequelize(databaseUrl, {
   dialect: 'postgres',
+  // LOGGING: Turn off when in production
   logging: process.env.NODE_ENV === 'development' ? console.log : false,
   pool: {
     max: 5,
@@ -16,6 +18,14 @@ export const sequelize = new Sequelize(databaseUrl, {
   }
 });
 
+console.log('Sequelize config:', {
+  database: sequelize.config.database,
+  username: sequelize.config.username,
+  host: sequelize.config.host,
+  port: sequelize.config.port
+});
+
+// THIS FUNC CONNECTS TO DATABASE IN SERVER.TS
 export const connectDB = async (): Promise<void> => {
   try {
     await sequelize.authenticate();

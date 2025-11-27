@@ -1,3 +1,8 @@
+CREATE NETWORK IF NEEDED:
+
+docker network create task-network
+
+
 POSTGRE SQL CONTAINER:
 
 docker run -d
@@ -6,4 +11,12 @@ docker run -d
   -e POSTGRES_USER=task-user
   -e POSTGRES_PASSWORD=task-pw
   -p 5432:5432
+  --network task-network
   postgres:alpine
+
+
+CREATE APP IMAGE AND CONTAINER
+
+  docker build -t task-app .
+
+  docker run --name task-app -p 8080:8080 --network task-network -t task-app
