@@ -26,10 +26,8 @@ jobs:
         run: npm install
 
       - name: Run the linter
-        working-directory: ./backend
         run: npm run lint:backend
 
       - name: Run the tests
-        working-directory: ./backend
         run: npm test:backend
 
