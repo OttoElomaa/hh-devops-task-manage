@@ -29,5 +29,5 @@ jobs:
         run: npm run lint:backend
 
       - name: Run the tests
-        run: npm test:backend
+        run: npm run test:backend
 
