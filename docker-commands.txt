@@ -1,0 +1,9 @@
+POSTGRE SQL CONTAINER:
+
+docker run -d
+  --name task-postgres-local
+  -e POSTGRES_DB=task-db
+  -e POSTGRES_USER=task-user
+  -e POSTGRES_PASSWORD=task-pw
+  -p 5432:5432
+  postgres:alpine

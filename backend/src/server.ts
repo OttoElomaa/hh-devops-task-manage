@@ -12,6 +12,9 @@ dotenv.config();
 
 const app: Application = express();
 
+// Make use of DOTENV to check the DB url
+console.log('DATABASE_URL:', process.env.DATABASE_URL);
+
 if (process.env.NODE_ENV !== 'test') {
   connectDB();
 }
