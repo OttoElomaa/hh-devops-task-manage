@@ -11,6 +11,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+
+    # Source: Tutorial in Github documentation. 
+    # Link: https://docs.github.com/en/actions/tutorials/use-containerized-services/create-postgresql-service-containers
+    # Create service containers
+    services:
+      postgres:
+        image: postgres
+
+        # Provide the postgres instance credentials
+        env:
+          POSTGRES_DB: test-db
+          POSTGRES_USER: test-user
+          POSTGRES_PASSWORD: test-pw
+
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+
+
     steps:
       - name: Checkout the repository code
         uses: actions/checkout@v5
@@ -28,6 +52,10 @@ jobs:
       - name: Run the linter
         run: npm run lint:backend
 
+      # Run tests using the connection URL for the postgres instance in this Actions workflow
       - name: Run the tests
+        env:
+          DATABASE_URL: postgresql://test-user:test-pw@localhost:5432/test-db
+          # NODE_ENV: test
         run: npm run test:backend
 
