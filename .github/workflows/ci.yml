@@ -63,3 +63,66 @@ jobs:
       - name: Run the tests
         run: npm run test:frontend
 
+  # Source: Github Docs. Tutorials. Publish Docker Images
+  # Link: https://docs.github.com/en/actions/tutorials/publish-packages/publish-docker-images
+  # JOB: PUSH DOCKER IMAGES
+  push_to_registry:
+
+    name: Push Docker image to Docker Hub
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v5
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+
+      # BACKEND METADATA AND BUILD
+      - name: BACKEND - Extract metadata (tags, labels) for Docker
+        id: task-back-meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: elomaaot/task-app
+
+      - name: BACKEND - Build and push Docker image
+        id: task-back-push
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: ./backend
+          file: ./backend/dockerfile
+          push: true
+          tags: ${{ steps.task-back-meta.outputs.tags }}
+          labels: ${{ steps.task-back-meta.outputs.labels }}
+      
+      # FRONTEND METADATA AND BUILD
+      - name: FRONTEND - Extract metadata (tags, labels) for Docker
+        id: task-front-meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: elomaaot/task-front
+
+      - name: FRONTEND - Build and push Docker image
+        id: task-front-push
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: ./frontend
+          file: ./frontend/dockerfile
+          push: true
+          tags: ${{ steps.task-front-meta.outputs.tags }}
+          labels: ${{ steps.task-front-meta.outputs.labels }}
+
+
+
+
