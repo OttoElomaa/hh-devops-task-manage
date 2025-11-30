@@ -60,3 +60,6 @@ jobs:
       - name: Run the linter on frontend
         run: npm run lint:frontend
 
+      - name: Run the tests
+        run: npm run test:frontend
+
