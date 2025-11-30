@@ -2,7 +2,7 @@
 # Link: https://www.docker.com/blog/how-to-dockerize-react-app/
 
 # Use the latest LTS version of Node.js
-FROM node:20-alpine
+FROM node:20-alpine AS builder
  
 # Set the working directory inside the container
 WORKDIR /app
@@ -15,9 +15,30 @@ RUN npm install
  
 # Copy the rest of your application files
 COPY . .
- 
+
+
+# ARG -> ENV used to get the URL from the Workflow
+ARG VITE_API_URL
+ENV VITE_API_URL=$TASK_API_URL
+
+
+# Need for npm run build was noticed and explained by Claude.ai
+# Builder -> Serve separation instructed by Claude.ai
+# Build the static app (environment variable is baked in here)
+RUN npm run build
+
+# Stage 2: Serve
+FROM nginx:alpine
+
+# Copy built files to nginx
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+
 # Expose the port your app runs on
 EXPOSE 5173
  
 # Define the command to run your app
-CMD ["npm", "run", "dev"]
+#CMD ["npm", "run", "dev"]
+
+# NGINX RUN command by Claude.ai
+CMD ["nginx", "-g", "daemon off;"]
