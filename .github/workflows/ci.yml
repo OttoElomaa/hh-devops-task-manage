@@ -44,12 +44,9 @@ jobs:
 
       - name: Install all, i guess
         run: npm run install:all
-      
-      - name: Install backend dependencies
-        working-directory: ./backend
-        run: npm install
 
-      - name: Run the linter
+        # BACKEND TEST AND LINT
+      - name: Run the linter on backend
         run: npm run lint:backend
 
       # Run tests using the connection URL for the postgres instance in this Actions workflow
@@ -58,4 +55,8 @@ jobs:
           DATABASE_URL: postgresql://test-user:test-pw@localhost:5432/test-db
           # NODE_ENV: test
         run: npm run test:backend
+      
+      # FRONTEND TEST AND LINT
+      - name: Run the linter on frontend
+        run: npm run lint:frontend
 
